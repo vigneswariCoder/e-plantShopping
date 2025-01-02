@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ProductList.css'
 import CartItem from './CartItem';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from './CartSlice';
 function ProductList() {
     const [showCart, setShowCart] = useState(false);
@@ -254,9 +254,9 @@ function ProductList() {
 
     const handleAddToCart = (item) => {
         dispatch(addItem(item));
-        setAddedToCart({ [item.name]: true }); // Track if the item has been added to the cart
+        setAddedToCart({ [item.name]: true });
     };
-
+console.log("count",cartCount)
     return (
         <div>
             <div className="navbar" style={{ backgroundColor: '#4CAF50', color: '#fff', padding: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '20px' }}>
@@ -271,7 +271,7 @@ function ProductList() {
                         </a>
                     </div>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '1100px' }}>
+                <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'center', width: '1100px' }}>
                     <div>
                         <a href="#" onClick={(e) => handleCartClick(e)} style={{ color: 'white', fontSize: '30px', textDecoration: 'none' }}>
                             <h1 className='cart'>
@@ -282,24 +282,25 @@ function ProductList() {
                                     <path d="M42.3,72H221.7l-26.4,92.4A15.9,15.9,0,0,1,179.9,176H84.1a15.9,15.9,0,0,1-15.4-11.6L32.5,37.8A8,8,0,0,0,24.8,32H8" fill="none" stroke="#faf9f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" id="mainIconPathAttribute"></path>
                                 </svg>
                             </h1>
+                            {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
                         </a>
                     </div>
                 </div>
-                                asaa{cartCount > 0 && <span className="cart-count">a{cartCount}</span>}
+            </div>
             {!showCart ? (
                 <div className="product-grid">
                     {plantsArray.map((category, index) => (
                         <div key={index} className="category-section">
-                            <h2>{category.category}</h2>
+                            <h2 style={{textAlign: "center"}}>{category.category}</h2>
                             <div className="product-list">
                                 {category.plants.map((plant) => (
                                     <div key={plant.name} className="product-card">
-                                        <img className="product-card" src={plant.image} alt={plant.name}/>
+                                        <img className="product-card" src={plant.image} alt={plant.name} />
                                         <h3>{plant.name}</h3>
                                         <p>{plant.description}</p>
-                                        <span>{plant.cost}</span><br/>
+                                        <span>${plant.cost}</span><br />
                                         <button
-                                        className='add-cart'
+                                            className='add-cart'
                                             onClick={() => handleAddToCart(plant)}
                                             disabled={addedToCart[plant.name]}
                                         >
@@ -314,7 +315,6 @@ function ProductList() {
             ) : (
                 <CartItem onContinueShopping={handleContinueShopping} />
             )}
-            </div>
         </div>
     );
 }
